@@ -3,15 +3,8 @@ const Promise = require('bluebird')
 const dir = require(`${global.baseDir}/global-dirs`)
 const logger = require(`${dir.utils}/logger`)
 
-// const POWERED_ON = 1
 const DURATION = 500
-const HUE_VARIATION = 2 // Has to divide 360 to an integer
-
-// const isLightOn = ({ settings: { power } }) => power === POWERED_ON
-
-// const isLightOnInGroup = lightsInGroup => (
-// 	lightsInGroup.some(isLightOn)
-// )
+const HUE_INCREMENT = 5 // Has to divide 360 to an integer
 
 const isLightOnline = Boolean
 const getLightById = lifxClient => ({ id }) => lifxClient.light(id)
@@ -71,7 +64,7 @@ const turnOffLights = lights => (
 	.then(() => lights)
 )
 
-const cycleLightsColor = (promise, duration = 0, hue = HUE_VARIATION) => (
+const cycleLightsColor = (promise, duration = 0, hue = HUE_INCREMENT) => (
 	hue % 360 === 0
 	? promise
 	: (
@@ -82,7 +75,7 @@ const cycleLightsColor = (promise, duration = 0, hue = HUE_VARIATION) => (
 				.delay(duration)
 			),
 			duration,
-			hue + HUE_VARIATION
+			hue + HUE_INCREMENT
 		)
 	)
 )

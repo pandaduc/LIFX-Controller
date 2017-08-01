@@ -9,6 +9,7 @@ const setupServer = require(`${dir.server}setup-server`)
 const startServer = require(`${dir.server}start-server`)
 
 // Load Middleware
+const cycleGroupColors = require(`${dir.middleware}cycle-group-colors`)
 const discoverDevices = require(`${dir.middleware}discover-devices`)
 const setLightsBrightness = require(`${dir.middleware}set-lights-brightness`)
 const toggleGroup = require(`${dir.middleware}toggle-group`)
@@ -23,6 +24,13 @@ const serverSettings = setupServer()
 serverSettings.get(
 	'/',
 	(req, res) => res.end('You no be hearz.')
+)
+
+serverSettings.get(
+	'/cycle-group-colors/:groupName/:duration',
+	({ params: { duration, groupName } }, res) => res.send(
+		cycleGroupColors(lifxClient, lifxConfig)(groupName, duration)
+	)
 )
 
 serverSettings.get(
